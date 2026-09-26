@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 日本東北6日秋季家族旅行</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        autumn: {
+                            red: '#9B2C2C',     /* 楓紅 */
+                            lightRed: '#C53030',
+                            yellow: '#D69E2E',  /* 銀杏黃 */
+                            lightYellow: '#F6E05E',
+                            brown: '#744210',   /* 大地木褐 */
+                            bg: '#FDFBF7'       /* 溫暖米白背景 */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 隱藏捲軸但保持可捲動 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-autumn-bg text-gray-800 font-sans flex flex-col min-h-screen">
+
+    <!-- 導覽列 -->
+    <nav class="bg-autumn-red text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center cursor-pointer" onclick="switchPage('home')">
+                    <span class="font-bold text-xl tracking-wider">🍁 2026 東北家族旅</span>
+                </div>
+                <!-- 電腦版選單 -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#" onclick="switchPage('home')" class="hover:bg-autumn-lightRed px-3 py-2 rounded-md text-sm font-medium transition">首頁</a>
+                        <a href="#" onclick="switchPage('itinerary')" class="hover:bg-autumn-lightRed px-3 py-2 rounded-md text-sm font-medium transition">每日行程</a>
+                        <a href="#" onclick="switchPage('attractions')" class="hover:bg-autumn-lightRed px-3 py-2 rounded-md text-sm font-medium transition">景點介紹</a>
+                        <a href="#" onclick="switchPage('map')" class="hover:bg-autumn-lightRed px-3 py-2 rounded-md text-sm font-medium transition">旅遊地圖</a>
+                        <a href="#" onclick="switchPage('hotels')" class="hover:bg-autumn-lightRed px-3 py-2 rounded-md text-sm font-medium transition">飯店位置</a>
+                        <a href="#" onclick="switchPage('shopping')" class="hover:bg-autumn-lightRed px-3 py-2 rounded-md text-sm font-medium transition">購物</a>
+                        <a href="#" onclick="switchPage('food')" class="hover:bg-autumn-lightRed px-3 py-2 rounded-md text-sm font-medium transition">美食</a>
+                    </div>
+                </div>
+                <!-- 手機版漢堡選單按鈕 -->
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" onclick="toggleMobileMenu()" class="inline-flex items-center justify-center p-2 rounded-md hover:bg-autumn-lightRed focus:outline-none">
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 手機版下拉選單 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-autumn-red border-t border-autumn-lightRed">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 shadow-inner">
+                <a href="#" onclick="switchPage('home'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-autumn-lightRed">首頁</a>
+                <a href="#" onclick="switchPage('itinerary'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-autumn-lightRed">每日行程</a>
+                <a href="#" onclick="switchPage('attractions'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-autumn-lightRed">景點介紹</a>
+                <a href="#" onclick="switchPage('map'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-autumn-lightRed">旅遊地圖</a>
+                <a href="#" onclick="switchPage('hotels'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-autumn-lightRed">飯店位置</a>
+                <a href="#" onclick="switchPage('shopping'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-autumn-lightRed">購物</a>
+                <a href="#" onclick="switchPage('food'); toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-autumn-lightRed">美食</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要內容區 -->
+    <main class="flex-grow w-full max-w-5xl mx-auto p-4 sm:p-6 pb-20">
+        
+        <!-- 0. 首頁 -->
+        <section id="page-home" class="fade-in block">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl md:text-4xl font-bold text-autumn-brown mb-4">日本東北秋季慢遊</h1>
+                <p class="text-gray-600 leading-relaxed max-w-2xl mx-auto">
+                    歡迎來到我們的家庭旅行計畫！這次我們將放慢腳步，避開擁擠的人潮，深入日本東北地區。<br>
+                    欣賞壯麗的秋楓、體驗在地文化，以自然風景為優先，共創屬於我們家最溫馨的回憶。
+                </p>
+            </div>
+            
+            <div class="bg-white p-4 rounded-xl shadow-md mb-10">
+                <img src="jpen6.jpg" alt="日本東北6縣景點地圖" class="w-full h-auto rounded-lg object-contain" onerror="this.onerror=null; this.src='https://placehold.co/800x600/FDFBF7/9B2C2C?text=Tohoku+Travel+Map';">
+                <p class="text-center text-sm text-gray-500 mt-2">日本東北地理位置與景點總覽</p>
+            </div>
+
+            <!-- 首頁六大主題導覽 -->
+            <h2 class="text-2xl font-bold text-center text-autumn-brown mb-6">行前準備與資訊</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <button onclick="switchPage('itinerary')" class="bg-white hover:bg-orange-50 border-t-4 border-autumn-red p-6 rounded-lg shadow transition transform hover:-translate-y-1 text-center">
+                    <span class="text-3xl mb-2 block">🗓️</span>
+                    <span class="font-bold text-gray-800">每日行程</span>
+                </button>
+                <button onclick="switchPage('attractions')" class="bg-white hover:bg-orange-50 border-t-4 border-autumn-yellow p-6 rounded-lg shadow transition transform hover:-translate-y-1 text-center">
+                    <span class="text-3xl mb-2 block">⛰️</span>
+                    <span class="font-bold text-gray-800">景點介紹</span>
+                </button>
+                <button onclick="switchPage('map')" class="bg-white hover:bg-orange-50 border-t-4 border-green-600 p-6 rounded-lg shadow transition transform hover:-translate-y-1 text-center">
+                    <span class="text-3xl mb-2 block">🗺️</span>
+                    <span class="font-bold text-gray-800">旅遊地圖</span>
+                </button>
+                <button onclick="switchPage('hotels')" class="bg-white hover:bg-orange-50 border-t-4 border-blue-600 p-6 rounded-lg shadow transition transform hover:-translate-y-1 text-center">
+                    <span class="text-3xl mb-2 block">🏨</span>
+                    <span class="font-bold text-gray-800">飯店位置</span>
+                </button>
+                <button onclick="switchPage('shopping')" class="bg-white hover:bg-orange-50 border-t-4 border-pink-500 p-6 rounded-lg shadow transition transform hover:-translate-y-1 text-center">
+                    <span class="text-3xl mb-2 block">🛍️</span>
+                    <span class="font-bold text-gray-800">購物清單</span>
+                </button>
+                <button onclick="switchPage('food')" class="bg-white hover:bg-orange-50 border-t-4 border-orange-500 p-6 rounded-lg shadow transition transform hover:-translate-y-1 text-center">
+                    <span class="text-3xl mb-2 block">🍱</span>
+                    <span class="font-bold text-gray-800">美食推薦</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 1. 每日行程 -->
+        <section id="page-itinerary" class="fade-in hidden">
+            <h2 class="text-3xl font-bold text-autumn-brown mb-6 border-b-2 border-autumn-red pb-2">每日行程表</h2>
+            <p class="text-sm text-gray-600 mb-6 bg-yellow-50 p-3 rounded border border-yellow-200">
+                💡 貼心提醒：本次旅行以自然風景為主，每日最多安排三個景點，保持悠閒節奏。<br>
+                點擊帶有底線的景點名稱，可直接查看該景點詳細介紹喔！
+            </p>
+
+            <div class="space-y-6">
+                <!-- D1 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-autumn-red">
+                    <div class="bg-gray-50 px-4 py-3 border-b flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-autumn-brown">D1 | 10/29(四) 出發與上野採買</h3>
+                        <span class="text-sm bg-gray-200 text-gray-700 px-2 py-1 rounded">住宿：東京上野</span>
+                    </div>
+                    <div class="p-4 text-gray-700 space-y-2">
+                        <p><strong>09:00 - 12:50</strong> 從台北松山機場 (TSA) 直飛東京羽田機場 (HND) 【中華航空 CI220】。</p>
+                        <p><strong>下午：</strong> 從羽田機場搭乘大眾交通工具前往上野。</p>
+                        <p><strong>14:40 - 15:00</strong> 抵達 <span class="font-semibold text-blue-700">ホテルリソル上野</span> 辦理入住。</p>
+                        <p><strong>15:00 - 16:00</strong> 處理 JR EAST PASS 兌換及主要新幹線指定席預約。</p>
+                        <p><strong>16:00 - 17:30</strong> 於上野阿美橫町/御徒町進行藥妝採買 (詳見<a href="#" onclick="switchPage('shopping'); switchSubTab('shopping', 'drugstore')" class="text-autumn-red underline">購物篇</a>)。</p>
+                        <p><strong>17:30 - 18:30</strong> 晚餐 (依現場狀況選擇)。</p>
+                    </div>
+                </div>
+
+                <!-- D2 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-autumn-yellow">
+                    <div class="bg-gray-50 px-4 py-3 border-b flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-autumn-brown">D2 | 10/30(五) 尋訪日本三景</h3>
+                        <span class="text-sm bg-gray-200 text-gray-700 px-2 py-1 rounded">住宿：仙台</span>
+                    </div>
+                    <div class="p-4 text-gray-700 space-y-2">
+                        <p><strong>08:43 - 10:15</strong> 搭乘新幹線「はやぶさ7」從上野前往仙台，抵達後先至飯店寄放大型行李。</p>
+                        <p><strong>10:30 - 11:08</strong> 搭乘 JR 仙石線從仙台前往 <a href="#" onclick="switchPage('attractions'); switchSubTab('attractions', 'matsushima')" class="text-autumn-red underline font-semibold">松島海岸</a>。</p>
+                        <p><strong>12:00 - 12:50</strong> 乘坐松島灣遊覽船 (建議預約)。</p>
+                        <p><strong>12:50 - 13:50</strong> 於松島周邊享用午餐。</p>
+                        <p><strong>14:00 - 15:00</strong> 參觀國寶瑞巖寺。</p>
+                        <p><strong>15:00 - 16:00</strong> 返回仙台，傍晚於仙台車站周邊購物 (PLST/Uniqlo) 與晚餐。</p>
+                    </div>
+                </div>
+
+                <!-- D3 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-green-600">
+                    <div class="bg-gray-50 px-4 py-3 border-b flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-autumn-brown">D3 | 10/31(六) 登高望遠山寺行</h3>
+                        <span class="text-sm bg-gray-200 text-gray-700 px-2 py-1 rounded">住宿：盛岡</span>
+                    </div>
+                    <div class="p-4 text-gray-700 space-y-2">
+                        <p><strong>08:20 - 09:30</strong> 逛仙台朝市，推薦品嚐齋藤惣菜店可樂餅與毛豆團子。</p>
+                        <p><strong>09:40 - 10:15</strong> 退房，悠閒前往仙台車站。</p>
+                        <p><strong>10:15 - 11:21</strong> 搭乘 JR 仙山線從仙台前往 <a href="#" onclick="switchPage('attractions'); switchSubTab('attractions', 'yamadera')" class="text-autumn-red underline font-semibold">山寺 (立石寺)</a>。</p>
+                        <p><strong>11:25 - 15:20</strong> 漫步登頂山寺，欣賞秋季絕景。期間約 <strong>12:20-13:10</strong> 享用山形蕎麥/山菜料理午餐。</p>
+                        <p><strong>15:28 - 16:25</strong> 搭乘 JR 仙山線從山寺返回北仙台。</p>
+                        <p><strong>16:32 - 17:19</strong> 轉乘至仙台站，前往新幹線月台。</p>
+                        <p><strong>17:19 - 17:58</strong> 搭乘新幹線「はやぶさ45」從仙台抵達盛岡，入住飯店。</p>
+                    </div>
+                </div>
+
+                <!-- D4 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-blue-500">
+                    <div class="bg-gray-50 px-4 py-3 border-b flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-autumn-brown">D4 | 11/1(日) 悠遊盛岡與絕美溪谷</h3>
+                        <span class="text-sm bg-gray-200 text-gray-700 px-2 py-1 rounded">住宿：盛岡</span>
+                    </div>
+                    <div class="p-4 text-gray-700 space-y-2">
+                        <p><strong>08:00 - 09:20</strong> 盛岡市區悠閒散步 (盛岡城跡公園、中津川周邊)。大行李留於飯店。</p>
+                        <p><strong>09:20 - 09:50</strong> 回飯店準備前往盛岡站。</p>
+                        <p><strong>10:08 - 10:47</strong> 搭乘東北新幹線從盛岡抵達一之關。</p>
+                        <p><strong>11:00 - 11:48</strong> 轉搭特色列車「Pokémon with You Train」從一之關前往 <a href="#" onclick="switchPage('attractions'); switchSubTab('attractions', 'geibikei')" class="text-autumn-red underline font-semibold">猊鼻溪</a>。</p>
+                        <p><strong>11:48 - 12:40</strong> 猊鼻溪周邊享用簡單午餐及候船。</p>
+                        <p><strong>13:00 - 14:30</strong> 體驗猊鼻溪舟下り (乘船遊溪)。</p>
+                        <p><strong>15:08 - 15:40</strong> 搭乘 JR 大船渡線從猊鼻溪返回一之關。</p>
+                        <p><strong>16:00 - </strong> 轉乘新幹線由一之關返回盛岡，晚上休息與晚餐。</p>
+                    </div>
+                </div>
+
+                <!-- D5 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-purple-500">
+                    <div class="bg-gray-50 px-4 py-3 border-b flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-autumn-brown">D5 | 11/2(一) 奧入瀨溪流精華健行</h3>
+                        <span class="text-sm bg-gray-200 text-gray-700 px-2 py-1 rounded">住宿：盛岡</span>
+                    </div>
+                    <div class="p-4 text-gray-700 space-y-2">
+                        <p><strong>上午：</strong> 輕裝出發 (大行李留飯店)，搭乘新幹線從盛岡抵達八戶。</p>
+                        <p><strong>10:00 - 11:44</strong> 於八戶站西口搭乘 JR 巴士「おいらせ21號」(務必預約)，於「石ヶ戶」下車，開始 <a href="#" onclick="switchPage('attractions'); switchSubTab('attractions', 'oirase')" class="text-autumn-red underline font-semibold">奧入瀨溪流</a> 行程。</p>
+                        <p><strong>11:44 - 13:15</strong> 健行首段：石ヶ戶 → 雲井の滝 (約 2.6 km，時間充裕可盡情拍照)。</p>
+                        <p><strong>13:15 - 13:24</strong> 搭乘接駁公車「みずうみ82號」至「銚子大滝」。</p>
+                        <p><strong>13:24 - 14:28</strong> 健行末段：銚子大滝 → 子ノ口 (約 1.6 km)。</p>
+                        <p><strong>14:28 - 14:43</strong> 搭乘接駁公車「みずうみ6號」抵達終點「十和田湖(休屋)」。</p>
+                        <p><strong>14:43 - 16:00</strong> 於休屋商圈享用午餐/下午茶，漫步至十和田神社或乙女像。</p>
+                        <p><strong>16:00 - 18:20</strong> 於休屋搭乘 JR 巴士返程，抵達八戶站西口。</p>
+                        <p><strong>18:56 - 19:28</strong> 搭乘新幹線「はやぶさ64」從八戶返回盛岡。</p>
+                    </div>
+                </div>
+
+                <!-- D6 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-gray-500">
+                    <div class="bg-gray-50 px-4 py-3 border-b flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-autumn-brown">D6 | 11/3(二) 滿載而歸</h3>
+                        <span class="text-sm bg-gray-200 text-gray-700 px-2 py-1 rounded">賦歸</span>
+                    </div>
+                    <div class="p-4 text-gray-700 space-y-2">
+                        <p><strong>07:37 - 09:47</strong> 帶著行李退房，搭乘新幹線「はやぶさ6」從盛岡前往東京。</p>
+                        <p><strong>10:03 - 11:27</strong> 轉乘成田特快 N'EX 從東京抵達成田機場。</p>
+                        <p><strong>14:35 - </strong> 辦理報到，搭乘中華航空 CI101 從成田機場 (NRT) 返回溫暖的家 (桃園機場)。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. 景點介紹 -->
+        <section id="page-attractions" class="fade-in hidden">
+            <h2 class="text-3xl font-bold text-autumn-brown mb-6 border-b-2 border-autumn-red pb-2">景點介紹</h2>
+            
+            <!-- 景點子選單 -->
+            <div class="flex overflow-x-auto no-scrollbar space-x-2 mb-6 border-b border-gray-200 pb-2">
+                <button onclick="switchSubTab('attractions', 'matsushima')" id="tab-attractions-matsushima" class="sub-tab-btn px-4 py-2 bg-autumn-red text-white rounded-t-lg whitespace-nowrap font-medium transition">松島海岸</button>
+                <button onclick="switchSubTab('attractions', 'yamadera')" id="tab-attractions-yamadera" class="sub-tab-btn px-4 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-t-lg whitespace-nowrap font-medium transition">山寺</button>
+                <button onclick="switchSubTab('attractions', 'geibikei')" id="tab-attractions-geibikei" class="sub-tab-btn px-4 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-t-lg whitespace-nowrap font-medium transition">猊鼻溪</button>
+                <button onclick="switchSubTab('attractions', 'oirase')" id="tab-attractions-oirase" class="sub-tab-btn px-4 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-t-lg whitespace-nowrap font-medium transition">奧入瀨溪流</button>
+            </div>
+
+            <!-- 松島海岸 -->
+            <div id="content-attractions-matsushima" class="sub-tab-content block bg-white p-6 rounded-b-lg rounded-tr-lg shadow-md">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">松島海岸 (日本三景)</h3>
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Matsushima_Bay.jpg/600px-Matsushima_Bay.jpg" alt="松島灣" class="rounded-lg w-full object-cover h-48" onerror="this.onerror=null; this.src='https://placehold.co/600x400/8B0000/FFF?text=Matsushima+Bay';">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Zuiganji_Hondo_2016.jpg/600px-Zuiganji_Hondo_2016.jpg" alt="瑞巖寺" class="rounded-lg w-full object-cover h-48" onerror="this.onerror=null; this.src='https://placehold.co/600x400/744210/FFF?text=Zuiganji+Temple';">
+                </div>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    松島與京都的天橋立、廣島的宮島並列為「日本三景」。散布在松島灣上的260多個大小島嶼，長滿了黑松與紅松，構成絕美的海景畫卷。來到這裡，最推薦的方式就是搭乘遊覽船，穿梭於島嶼之間，感受海風與大自然的鬼斧神工。
+                </p>
+                <p class="text-gray-700 leading-relaxed">
+                    除了自然景觀，這裡還有與伊達政宗淵源深厚的國寶「瑞巖寺」，莊嚴的建築與寧靜的參道，是非常值得一訪的人文歷史景點。
+                </p>
+            </div>
+
+            <!-- 山寺 -->
+            <div id="content-attractions-yamadera" class="sub-tab-content hidden bg-white p-6 rounded-b-lg rounded-tr-lg shadow-md">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">寶珠山 立石寺 (山寺)</h3>
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Yamadera_Niomon.jpg/600px-Yamadera_Niomon.jpg" alt="山寺石階" class="rounded-lg w-full object-cover h-48" onerror="this.onerror=null; this.src='https://placehold.co/600x400/D69E2E/FFF?text=Yamadera+Autumn+Steps';">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Godaido_of_Yamadera.jpg/600px-Godaido_of_Yamadera.jpg" alt="五大堂絕景" class="rounded-lg w-full object-cover h-48" onerror="this.onerror=null; this.src='https://placehold.co/600x400/9B2C2C/FFF?text=Godaido+View';">
+                </div>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    建於西元860年的立石寺，通稱「山寺」。最著名的特色是需要攀登約1,015階的石階才能抵達山頂。雖然聽起來有些挑戰，但在涼爽的秋季，沿途被紅葉與黃葉包圍，邊走邊欣賞奇岩怪石與歷史古蹟，腳步也會變得輕盈。
+                </p>
+                <p class="text-gray-700 leading-relaxed">
+                    日本俳句大師松尾芭蕉曾在此吟詠名句：「天籟寂靜，蟬聲沁入岩石中」。抵達頂部的「五大堂」宛如懸浮於懸崖上，從那裡俯瞰山谷間的秋色與聚落，絕對會讓您覺得不虛此行。
+                </p>
+            </div>
+
+            <!-- 猊鼻溪 -->
+            <div id="content-attractions-geibikei" class="sub-tab-content hidden bg-white p-6 rounded-b-lg rounded-tr-lg shadow-md">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">猊鼻溪 (乘船遊溪)</h3>
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Geibikei.jpg/600px-Geibikei.jpg" alt="猊鼻溪遊船" class="rounded-lg w-full object-cover h-48" onerror="this.onerror=null; this.src='https://placehold.co/600x400/2E8B57/FFF?text=Geibikei+Boat+Ride';">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Geibikei_2.jpg/600px-Geibikei_2.jpg" alt="高聳岩壁" class="rounded-lg w-full object-cover h-48" onerror="this.onerror=null; this.src='https://placehold.co/600x400/8B4513/FFF?text=Towering+Cliffs';">
+                </div>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    猊鼻溪是日本百景之一，這裡擁有高達百公尺的石灰岩峭壁，綿延約兩公里。與一般步行觀光的峽谷不同，遊覽猊鼻溪最好的方式是「舟下り」（乘木舟順流而下）。
+                </p>
+                <p class="text-gray-700 leading-relaxed">
+                    船夫會用一根長篙撐船，在寧靜的溪谷中緩緩前行，秋季時兩旁的紅葉倒映在水面上，宛如仙境。航程中您還可以購買飼料餵食跟隨小船的魚和鴨子，到了折返點，更能體驗將「運玉」（刻有文字的幸運石）投入岩壁洞口祈福的樂趣，非常適合家庭同樂。
+                </p>
+            </div>
+
+            <!-- 奧入瀨溪流 -->
+            <div id="content-attractions-oirase" class="sub-tab-content hidden bg-white p-6 rounded-b-lg rounded-tr-lg shadow-md">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">奧入瀨溪流</h3>
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Oirase_Keiryu_Ashura_Stream_Autumn_2016.jpg/600px-Oirase_Keiryu_Ashura_Stream_Autumn_2016.jpg" alt="奧入瀨溪流秋景" class="rounded-lg w-full object-cover h-48" onerror="this.onerror=null; this.src='https://placehold.co/600x400/D2B48C/FFF?text=Oirase+Gorge+Autumn';">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Choshi_Ootaki_Oirase_Stream.jpg/600px-Choshi_Ootaki_Oirase_Stream.jpg" alt="奧入瀨瀑布" class="rounded-lg w-full object-cover h-48" onerror="this.onerror=null; this.src='https://placehold.co/600x400/556B2F/FFF?text=Waterfalls';">
+                </div>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    被譽為「日本最美溪谷」的奧入瀨溪流，是十和田湖流出的唯一河川。從十和田湖的子ノ口到燒山，綿延約14公里。這裡擁有茂密的原始森林、千變萬化的水流，以及無數個大小瀑布（如銚子大滝、雲井の滝）。
+                </p>
+                <p class="text-gray-700 leading-relaxed">
+                    本次行程為您精心挑選了「精華段健行搭配公車」的輕鬆走法。步道平緩好走，幾乎沒有高低起伏，讓全家人都能在芬多精與潺潺流水聲中，愜意地欣賞被染成金黃與橘紅的秋季夢幻景致。
+                </p>
+            </div>
+        </section>
+
+        <!-- 3. 旅遊地圖 -->
+        <section id="page-map" class="fade-in hidden">
+            <h2 class="text-3xl font-bold text-autumn-brown mb-6 border-b-2 border-autumn-red pb-2">旅遊地圖路線</h2>
+            <div class="bg-white p-4 rounded-xl shadow-md text-center">
+                <img src="map_ai.jpg" alt="日本東北每日行程路線地圖" class="max-w-full h-auto mx-auto rounded-lg" onerror="this.onerror=null; this.src='https://placehold.co/800x1200/FDFBF7/744210?text=Please+upload+map_ai.jpg';">
+                <p class="text-gray-600 mt-4 text-sm">行程動線一覽：從東京出發，一路向北探索宮城、岩手至青森的絕美秋景。</p>
+            </div>
+        </section>
+
+        <!-- 4. 飯店位置 -->
+        <section id="page-hotels" class="fade-in hidden">
+            <h2 class="text-3xl font-bold text-autumn-brown mb-6 border-b-2 border-autumn-red pb-2">住宿飯店指南</h2>
+            <p class="text-gray-600 mb-6">本次旅行挑選的飯店皆以「車站步行10分鐘內、交通便利」為首要條件，方便寄放行李與移動。</p>
+            
+            <div class="space-y-10">
+                <!-- Hotel 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-blue-500">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">D1 東京上野 | ホテルリソル上野 (Hotel Resol Ueno)</h3>
+                    <p class="text-gray-600 mb-4">📍 位置：距離 JR 上野站入谷口步行約 1 分鐘，全館禁菸，周邊採買極為方便。</p>
+                    <img src="hotel1.png" alt="上野飯店地圖" class="max-w-full h-auto rounded border border-gray-200" onerror="this.onerror=null; this.src='https://placehold.co/800x400/E5E7EB/4B5563?text=Map:+Hotel+Resol+Ueno';">
+                </div>
+
+                <!-- Hotel 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-blue-500">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">D2 仙台 | ダイワロイネットホテル仙台 (Daiwa Roynet Hotel Sendai)</h3>
+                    <p class="text-gray-600 mb-4">📍 位置：距離 JR 仙台站東口步行約 2 分鐘，車站共構及周邊商場林立，吃早餐與購物都順路。</p>
+                    <img src="hotel2.png" alt="仙台飯店地圖" class="max-w-full h-auto rounded border border-gray-200" onerror="this.onerror=null; this.src='https://placehold.co/800x400/E5E7EB/4B5563?text=Map:+Daiwa+Roynet+Sendai';">
+                </div>
+
+                <!-- Hotel 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-blue-500">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">D3-D5 盛岡 | ダイワロイネットホテル盛岡駅前 (Daiwa Roynet Hotel Morioka Ekimae)</h3>
+                    <p class="text-gray-600 mb-4">📍 位置：距離 JR 盛岡站極近，過馬路即達。連住三晚免搬行李，作為前往各景點的完美據點。</p>
+                    <img src="hotel3.png" alt="盛岡飯店地圖" class="max-w-full h-auto rounded border border-gray-200" onerror="this.onerror=null; this.src='https://placehold.co/800x400/E5E7EB/4B5563?text=Map:+Daiwa+Roynet+Morioka';">
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. 購物 -->
+        <section id="page-shopping" class="fade-in hidden">
+            <h2 class="text-3xl font-bold text-autumn-brown mb-6 border-b-2 border-autumn-red pb-2">購物血拚指南</h2>
+            
+            <div class="flex overflow-x-auto no-scrollbar space-x-2 mb-6 border-b border-gray-200 pb-2">
+                <button onclick="switchSubTab('shopping', 'uniqlo')" id="tab-shopping-uniqlo" class="sub-tab-btn px-4 py-2 bg-autumn-red text-white rounded-t-lg whitespace-nowrap font-medium transition">Uniqlo 門市</button>
+                <button onclick="switchSubTab('shopping', 'plst')" id="tab-shopping-plst" class="sub-tab-btn px-4 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-t-lg whitespace-nowrap font-medium transition">PLST 門市</button>
+                <button onclick="switchSubTab('shopping', 'drugstore')" id="tab-shopping-drugstore" class="sub-tab-btn px-4 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-t-lg whitespace-nowrap font-medium transition">藥妝店攻略</button>
+            </div>
+
+            <!-- Uniqlo -->
+            <div id="content-shopping-uniqlo" class="sub-tab-content block bg-white p-6 rounded-b-lg rounded-tr-lg shadow-md">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center"><span class="text-red-600 mr-2">■</span> Uniqlo 必逛分店</h3>
+                <div class="space-y-4 text-gray-700">
+                    <div class="bg-gray-50 p-4 rounded border-l-4 border-red-500">
+                        <h4 class="font-bold text-lg mb-2">📍 仙台車站周邊 (D2傍晚推薦)</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>ヨドバシ仙台店 (Yodobashi)：</strong> 位於 JR 仙台站東口，出站透過空橋步行約 1 分鐘即可抵達 Yodobashi 大樓 5 樓。</li>
+                            <li><strong>仙台アエル (AER) 店：</strong> 位於 JR 仙台站西口，步行約 2 分鐘的 AER 大樓 3 樓。</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded border-l-4 border-red-500">
+                        <h4 class="font-bold text-lg mb-2">📍 上野車站周邊 (D1下午推薦)</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>御徒町店 (吉池本店大樓)：</strong> 從上野車站步行或搭山手線 1 站即達。這是一間超大型店鋪 (1-4樓皆是)，款式尺寸最齊全！</li>
+                            <li><strong>エキュート上野 (ecute) 店：</strong> 位於 JR 上野站 3 樓 (入谷口剪票口內)，適合回飯店前快速補貨。</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded border-l-4 border-red-500">
+                        <h4 class="font-bold text-lg mb-2">📍 東京車站周邊</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>グランスタ東京店：</strong> 位於 JR 東京車站站內 (地下 1 樓，丸之內改札內區域)。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PLST -->
+            <div id="content-shopping-plst" class="sub-tab-content hidden bg-white p-6 rounded-b-lg rounded-tr-lg shadow-md">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center"><span class="text-gray-800 mr-2">■</span> PLST 氣質服飾</h3>
+                <p class="text-gray-600 mb-4">PLST 是 Uniqlo 旗下較具都會質感的品牌，版型非常適合亞洲人，強烈建議安排時間去逛逛喔！</p>
+                <div class="space-y-4 text-gray-700">
+                    <div class="bg-gray-50 p-4 rounded border-l-4 border-gray-700">
+                        <h4 class="font-bold text-lg mb-2">📍 PLST 仙台 PARCO 店 (推薦 D2 傍晚)</h4>
+                        <p>位於仙台站旁的 PARCO 本館 2 樓。從仙台車站西口出來走天橋即可直達，非常適合在仙台的晚上安排採買。</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded border-l-4 border-gray-700">
+                        <h4 class="font-bold text-lg mb-2">📍 大丸東京店</h4>
+                        <p>位置：JR 東京車站八重洲北口改札口旁。若在上野覺得時間充裕，也可搭乘 JR 山手線 (約5-7分鐘) 直接到東京站逛大丸百貨的分店。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 藥妝店 -->
+            <div id="content-shopping-drugstore" class="sub-tab-content hidden bg-white p-6 rounded-b-lg rounded-tr-lg shadow-md">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center"><span class="text-blue-500 mr-2">💊</span> 藥妝店採買策略</h3>
+                <div class="space-y-4 text-gray-700">
+                    <div class="bg-blue-50 p-4 rounded border-l-4 border-blue-500">
+                        <h4 class="font-bold text-lg mb-2 text-blue-800">主力戰場：D1 上野阿美橫町 (アメ横)</h4>
+                        <p class="mb-2">強烈建議將大量的藥妝採買集中在第一天下午的阿美橫町，買完直接拿回上野飯店，後面幾天才不會提得大包小包。</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li><strong>OS Drug (オーエスドラッグ)：</strong> 雖然不能免稅也不能刷卡，但現金價通常是全街最便宜！適合買常備藥品。</li>
+                            <li><strong>大國藥妝 (ダイコクドラッグ)：</strong> 價格親民，有會說中文的店員，零食和藥妝種類豐富。</li>
+                            <li><strong>松本清 (マツモトキヨシ)：</strong> 品項最齊全，特別是專櫃保養品與化妝品。</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded border-l-4 border-gray-400">
+                        <h4 class="font-bold text-lg mb-2">補貨備案：仙台與盛岡車站</h4>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li><strong>仙台車站：</strong> 車站大樓 S-PAL 內及西口周邊有非常多松本清與 Sun Drug (サンドラッグ)，若 D1 有漏買的可以補齊。</li>
+                            <li><strong>盛岡車站：</strong> 站內的 FESAN (フェザン) 百貨一樓也有大型松本清，住在盛岡的晚上隨時可以下樓逛。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. 美食 -->
+        <section id="page-food" class="fade-in hidden">
+            <h2 class="text-3xl font-bold text-autumn-brown mb-6 border-b-2 border-autumn-red pb-2">元氣美食與在地特色</h2>
+            
+            <div class="flex overflow-x-auto no-scrollbar space-x-2 mb-6 border-b border-gray-200 pb-2">
+                <button onclick="switchSubTab('food', 'breakfast')" id="tab-food-breakfast" class="sub-tab-btn px-4 py-2 bg-autumn-red text-white rounded-t-lg whitespace-nowrap font-medium transition">車站周邊早餐 / 咖啡</button>
+                <button onclick="switchSubTab('food', 'local')" id="tab-food-local" class="sub-tab-btn px-4 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-t-lg whitespace-nowrap font-medium transition">在地推薦美食 (無牛/無生食)</button>
+            </div>
+
+            <!-- 早餐 -->
+            <div id="content-food-breakfast" class="sub-tab-content block bg-white p-6 rounded-b-lg rounded-tr-lg shadow-md">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center"><span class="text-yellow-600 mr-2">☕</span> 喚醒早晨的美味</h3>
+                <p class="text-gray-600 mb-4">由於我們訂的方案皆不含早餐，以下為您整理各飯店車站周邊、早上8點前即營業的優質早午餐口袋名單，也可外帶上新幹線享用。</p>
+                
+                <h4 class="font-bold text-xl text-autumn-brown mt-6 mb-3 border-b pb-1">仙台車站周邊</h4>
+                <div class="space-y-4">
+                    <div class="bg-orange-50 p-4 rounded">
+                        <h5 class="font-bold text-lg">🍚 Date Cafe O'rder (日式在地早餐)</h5>
+                        <p class="text-sm text-gray-500 mb-2">位置：JR仙台站 2F 中央剪票口附近 | 營業時間：07:15 起</p>
+                        <p class="text-gray-700">交通極為方便。使用宮城縣產「一見鍾情」好米製作的手作飯糰、茶泡飯以及東北鄉土料理芋煮湯。早上想吃熱騰騰的日式朝食或趕時間外帶，這裡是首選！</p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded">
+                        <h5 class="font-bold text-lg">🥐 HUMMING MEAL MARKET COFFEE & BAR</h5>
+                        <p class="text-sm text-gray-500 mb-2">位置：S-PAL仙台 東館 2F | 營業時間：07:30 左右</p>
+                        <p class="text-gray-700">位於東口剪票口附近，有大片落地窗採光極佳。提供現烤麵包、三明治與香濃咖啡，環境悠閒，想吃西式輕食的好去處。</p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded">
+                        <h5 class="font-bold text-lg">🍳 杜之咖啡館 Cherish Coffee (チェリッシュ珈琲)</h5>
+                        <p class="text-sm text-gray-500 mb-2">位置：仙台站步行約3分鐘 | 營業時間：08:00 起</p>
+                        <p class="text-gray-700">主打嚴選日本產食材的日西式早餐與窗景咖啡座，環境安靜舒適，很適合悠閒地開啟早晨行程。</p>
+                    </div>
+                </div>
+
+                <h4 class="font-bold text-xl text-autumn-brown mt-6 mb-3 border-b pb-1">上野車站周邊</h4>
+                <div class="space-y-4">
+                    <div class="bg-orange-50 p-4 rounded">
+                        <h5 class="font-bold text-lg">🐼 Andersen アトレ上野店</h5>
+                        <p class="text-sm text-gray-500 mb-2">位置：JR 上野站內 (アトレ上野 1F)</p>
+                        <p class="text-gray-700">提供豐富的現烤麵包，還有超級可愛的「上野限定貓熊造型麵包」，小朋友一定會喜歡！</p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded">
+                        <h5 class="font-bold text-lg">🍞 ザ スタンダート ベイカーズ (The Standard Bakers)</h5>
+                        <p class="text-sm text-gray-500 mb-2">位置：JR 上野站 3 樓改札內 (ecute 商場)</p>
+                        <p class="text-gray-700">使用北海道小麥製作的精緻克拉夫特麵包，就在站內，買了直接上車非常方便。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 在地美食 -->
+            <div id="content-food-local" class="sub-tab-content hidden bg-white p-6 rounded-b-lg rounded-tr-lg shadow-md">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center"><span class="text-green-600 mr-2">🥢</span> 東北特色美食 (安心指南)</h3>
+                
+                <div class="bg-red-50 p-4 rounded border-l-4 border-red-500 mb-6">
+                    <p class="font-bold text-red-700">⚠️ 飲食特別叮嚀：</p>
+                    <p class="text-gray-700">我們家<strong>不吃牛、不吃馬肉，也不吃生食(生魚片等)</strong>。因此，請特別注意：到仙台時<strong>避開「牛舌 (牛タン)」</strong>料理；盛岡有名的「冷麵」湯頭經常使用牛骨熬製，建議點餐前確認或選擇替代方案。</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="border rounded-lg p-4 hover:shadow-md transition bg-gray-50">
+                        <h4 class="font-bold text-xl text-autumn-brown mb-2">盛岡炸醬麵 (盛岡じゃじゃ麺)</h4>
+                        <p class="text-gray-700">盛岡三大麵之一！這是一種溫熱的拌麵，主要配料是特製的肉味噌（通常為豬肉）、小黃瓜與蔥，完全沒有生食與牛肉的疑慮。吃完麵後，打一顆生雞蛋在碗裡，請店員加入熱湯（ちーたんたん），美味又暖胃！</p>
+                    </div>
+                    
+                    <div class="border rounded-lg p-4 hover:shadow-md transition bg-gray-50">
+                        <h4 class="font-bold text-xl text-autumn-brown mb-2">毛豆泥甜點 (ずんだ)</h4>
+                        <p class="text-gray-700">仙台的靈魂甜點！將毛豆搗碎加入糖做成翠綠色的甜泥。您可以在仙台車站或街邊找到「毛豆泥麻糬 (ずんだ餅)」或超級好喝的「毛豆泥奶昔 (ずんだシェイク)」，香甜可口，是百分之百安全的素食甜點。</p>
+                    </div>
+
+                    <div class="border rounded-lg p-4 hover:shadow-md transition bg-gray-50">
+                        <h4 class="font-bold text-xl text-autumn-brown mb-2">岩手碗子蕎麥麵 (わんこそば)</h4>
+                        <p class="text-gray-700">盛岡三大麵之一，也是一場有趣的家庭挑戰！店員會站在旁邊，每吃完一口份量的蕎麥麵，就立刻幫您加進新的一口，直到您將碗蓋上為止。湯頭主要是鰹魚/昆布醬油，配料多為海苔、芝麻等，好玩又好吃。</p>
+                    </div>
+
+                    <div class="border rounded-lg p-4 hover:shadow-md transition bg-gray-50">
+                        <h4 class="font-bold text-xl text-autumn-brown mb-2">米棒鍋 (きりたんぽ鍋)</h4>
+                        <p class="text-gray-700">雖然是秋田名產，但在東北各地的鄉土料理餐廳也能吃到。將搗碎的米飯捏在木串上烤過，再放入以「比內地雞」熬製的醬油雞湯中，搭配蔬菜與菇類燉煮。全部都是熟食，且湯頭溫潤，非常適合秋天的夜晚。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="bg-gray-800 text-gray-300 py-6 text-center mt-auto">
+        <p>2026 日本東北6天5夜自助旅行計畫</p>
+        <p class="text-sm mt-2 opacity-60">Enjoy your family trip! 🍁</p>
+    </footer>
+
+    <!-- 腳本 -->
+    <script>
+        // 頁面切換邏輯
+        const pages = ['home', 'itinerary', 'attractions', 'map', 'hotels', 'shopping', 'food'];
+        
+        function switchPage(targetPage) {
+            // 隱藏所有頁面
+            pages.forEach(page => {
+                const el = document.getElementById(`page-${page}`);
+                if (el) {
+                    el.classList.add('hidden');
+                }
+            });
+            // 顯示目標頁面
+            const targetEl = document.getElementById(`page-${targetPage}`);
+            if (targetEl) {
+                targetEl.classList.remove('hidden');
+                // 捲動到頂部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // 子頁籤切換邏輯 (景點、購物、美食)
+        function switchSubTab(category, tabId) {
+            // 找出該類別下所有的子按鈕與內容
+            const container = document.getElementById(`page-${category}`);
+            const buttons = container.querySelectorAll('.sub-tab-btn');
+            const contents = container.querySelectorAll('.sub-tab-content');
+
+            // 重置按鈕樣式並隱藏內容
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-autumn-red', 'text-white');
+                btn.classList.add('bg-gray-100', 'text-gray-600');
+            });
+            contents.forEach(content => {
+                content.classList.add('hidden');
+                content.classList.remove('block');
+            });
+
+            // 設定啟動的按鈕與內容
+            const activeBtn = document.getElementById(`tab-${category}-${tabId}`);
+            const activeContent = document.getElementById(`content-${category}-${tabId}`);
+            
+            if (activeBtn && activeContent) {
+                activeBtn.classList.remove('bg-gray-100', 'text-gray-600');
+                activeBtn.classList.add('bg-autumn-red', 'text-white');
+                activeContent.classList.remove('hidden');
+                activeContent.classList.add('block');
+            }
+        }
+
+        // 手機版選單開關
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
